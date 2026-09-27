@@ -1,26 +1,247 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
+/*
+ * Amber phosphor, not hacker green. See DESIGN.md.
+ * One theme only — the fiction is a single machine, so there is nothing to
+ * switch between.
+ */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+  --bg: #0b0906;
+  --bg-raised: #151009;
+  --fg: #ffb648;
+  --fg-dim: #a8722a;
+  --fg-faint: #5c4116;
+  --accent-cyan: #5fd3f3;
+  --accent-green: #6ee787;
+  --accent-red: #ff6b5e;
+  --accent-violet: #c39bff;
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+  --font-term: ui-monospace, 'Cascadia Code', 'JetBrains Mono', Menlo, Consolas, monospace;
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  color-scheme: dark;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-term);
+  font-size: 15px;
+  line-height: 1.55;
+  font-variant-ligatures: none;
+}
+
+/*
+ * The terminal owns its own scrolling (.term-scroll). Clamping the document
+ * here instead would also clamp /facilitator, which is a long printable page
+ * and must scroll normally.
+ */
+
+@media (max-width: 1024px) {
+  body {
+    font-size: 13px;
+  }
+}
+
+/* ── terminal chrome ─────────────────────────────────────────── */
+
+.term-shell {
+  display: flex;
+  flex-direction: column;
+  height: 100dvh;
+  overflow: hidden;
+  position: relative;
+}
+
+.term-status {
+  flex: 0 0 auto;
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  padding: 0.35rem 1rem;
+  border-bottom: 1px solid var(--fg-faint);
+  background: var(--bg-raised);
+  color: var(--fg-dim);
+  font-size: 0.85em;
+  letter-spacing: 0.04em;
+}
+
+.term-status[data-urgent='true'] {
+  color: var(--accent-red);
+  border-bottom-color: var(--accent-red);
+}
+
+.term-scroll {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 1rem;
+}
+
+.term-column {
+  max-width: 96ch;
+}
+
+.term-line {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  margin: 0;
+}
+
+/*
+ * Block-letter art only. At the body line-height the vertical strokes of the
+ * banner do not meet, so it reads as noise instead of letters. It must also
+ * never wrap: a wrapped banner is unrecognisable.
+ */
+.term-art {
+  line-height: 1.02;
+  white-space: pre;
+  overflow-wrap: normal;
+}
+
+.term-prompt-row {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: baseline;
+  gap: 0.5ch;
+  padding: 0.5rem 1rem 0.9rem;
+  border-top: 1px solid var(--fg-faint);
+}
+
+.term-prompt {
+  color: var(--fg-dim);
+  white-space: pre;
+}
+
+.term-input {
+  flex: 1 1 auto;
+  min-width: 0;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--fg);
+  font: inherit;
+  caret-color: var(--fg);
+  padding: 0;
+}
+
+.term-input::placeholder {
+  color: var(--fg-faint);
+}
+
+/* ── tones ───────────────────────────────────────────────────── */
+
+.tone-default {
+  color: var(--fg);
+}
+.tone-dim,
+.tone-input {
+  color: var(--fg-dim);
+}
+.tone-rule {
+  color: var(--fg-faint);
+}
+.tone-ok {
+  color: var(--accent-green);
+}
+.tone-fail {
+  color: var(--accent-red);
+}
+.tone-hint {
+  color: var(--accent-violet);
+}
+.tone-story {
+  color: var(--accent-cyan);
+}
+.tone-alert {
+  color: var(--accent-red);
+}
+
+/* ── CRT effect layer (all optional, all pointer-events: none) ── */
+
+.crt-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.crt-scanlines {
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.28) 0px,
+    rgba(0, 0, 0, 0.28) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+  opacity: 0.55;
+}
+
+.crt-vignette {
+  background: radial-gradient(ellipse at center, transparent 55%, rgba(0, 0, 0, 0.55) 100%);
+}
+
+.crt-flicker {
+  background: rgba(255, 182, 72, 0.02);
+  animation: crt-flicker 6s ease-in-out infinite;
+}
+
+/* Amplitude stays under 2% and the cycle is 6s — nothing here goes near the
+   3Hz photosensitivity threshold. */
+@keyframes crt-flicker {
+  0%,
+  100% {
+    opacity: 0.35;
+  }
+  47% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 0.15;
+  }
+  53% {
+    opacity: 0.5;
+  }
+}
+
+.crt-on .term-column {
+  text-shadow: 0 0 1px currentColor;
+}
+
+.term-cursor {
+  display: inline-block;
+  width: 0.6ch;
+  background: var(--fg);
+  animation: cursor-blink 1.1s step-end infinite;
+}
+
+@keyframes cursor-blink {
+  0%,
+  49% {
+    opacity: 1;
+  }
+  50%,
+  100% {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .crt-flicker,
+  .term-cursor {
+    animation: none;
+  }
+  .crt-flicker {
+    opacity: 0.3;
+  }
+}
+
+/* Focus is always visible: there is nothing else to click, so losing the
+   prompt is disorienting. */
+.term-input:focus-visible {
+  outline: none;
+}
+
+.term-shell:focus-within .term-prompt {
+  color: var(--fg);
 }

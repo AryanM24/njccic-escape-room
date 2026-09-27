@@ -1,0 +1,170 @@
+/*
+ * Plain, light, printable. The terminal aesthetic is for students; a teacher
+ * printing this at 7:40am needs black text on white paper.
+ */
+
+/* globals.css paints the document dark for the terminal; this page is paper. */
+:global(body) {
+  background: #fffdf8;
+}
+
+.page {
+  --ink: #14110c;
+  --muted: #5b5449;
+  --line: #d9d2c5;
+  --paper: #fffdf8;
+
+  min-height: 100dvh;
+  margin: 0 auto;
+  padding: 2.5rem 1.5rem 6rem;
+  max-width: 46rem;
+  background: var(--paper);
+  color: var(--ink);
+  font-family:
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    'Segoe UI',
+    sans-serif;
+  line-height: 1.6;
+}
+
+.page h1 {
+  font-size: 1.6rem;
+  margin: 0 0 0.25rem;
+}
+
+.page h2 {
+  font-size: 1.05rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 0.3rem;
+  margin: 2.5rem 0 1rem;
+}
+
+.page h3 {
+  font-size: 1.15rem;
+  margin: 0 0 0.2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1rem;
+}
+
+.page h4 {
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  margin: 1rem 0 0.3rem;
+}
+
+.page code {
+  font-family: ui-monospace, Menlo, Consolas, monospace;
+  background: #f1ece1;
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  padding: 0.05em 0.35em;
+  font-size: 0.92em;
+}
+
+.page ul,
+.page ol {
+  margin: 0.3rem 0;
+  padding-left: 1.3rem;
+}
+
+.page li {
+  margin: 0.25rem 0;
+}
+
+.sub {
+  color: var(--muted);
+  margin: 0;
+}
+
+.runsheet {
+  list-style: none;
+  padding-left: 0;
+  font-variant-numeric: tabular-nums;
+}
+
+.runsheet li {
+  border-left: 3px solid var(--line);
+  padding-left: 0.75rem;
+}
+
+.lock {
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 1rem 1.25rem 1.25rem;
+  margin: 1rem 0;
+  break-inside: avoid;
+}
+
+.minutes {
+  font-size: 0.8rem;
+  font-weight: 400;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.concept {
+  color: var(--muted);
+  font-size: 0.9rem;
+  margin: 0 0 0.6rem;
+}
+
+.answer {
+  font-size: 1.02rem;
+  margin: 0.4rem 0;
+}
+
+.answer code {
+  background: #fff4cf;
+  border-color: #e2cf94;
+  font-weight: 600;
+}
+
+.debrief {
+  margin: 0.2rem 0 0;
+  font-style: italic;
+}
+
+.gate {
+  border: 1px dashed var(--line);
+  border-radius: 6px;
+  padding: 1rem 1.25rem;
+  background: #fbf6ea;
+}
+
+@media print {
+  .page {
+    max-width: none;
+    padding: 0;
+  }
+
+  .gate {
+    display: none;
+  }
+}
+
+.ced {
+  list-style: none;
+  padding-left: 0;
+}
+
+.ced li {
+  margin: 0.15rem 0;
+}
+
+.ced code {
+  display: block;
+  font-size: 0.78rem;
+  background: transparent;
+  border: none;
+  padding: 0;
+  white-space: pre-wrap;
+}
