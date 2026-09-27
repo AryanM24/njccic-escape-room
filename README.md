@@ -69,8 +69,8 @@ Without the variable set, the page shows the run of show and no answers.
 
 [STUDENT-BRIEFING.md](STUDENT-BRIEFING.md) is the spoiler-free version to read aloud
 before they start, and **Protocol-Nightjar-Student-Guide.docx** is the printable
-three-page handout: the scenario, a command reference, a findings log they fill in as
-they go, and space for debrief notes. Neither gives anything away.
+handout: the scenario, a command reference, spoiler-free directions for each finding,
+a findings log they fill in as they go, and space for debrief notes. Neither gives anything away.
 
 Rebuild the handout with `npm i --no-save docx && node scripts/build-student-guide.mjs
 Protocol-Nightjar-Student-Guide.docx`. `docx` is not a project dependency on purpose.
