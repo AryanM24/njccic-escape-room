@@ -196,17 +196,17 @@ const writingLines = (count) =>
 const COMMANDS = [
   ['help', 'Lists every command you can run, grouped by what it is for.'],
   ['briefing', 'Your shift notes from the OT Security Lead.'],
-  ['locks', 'The five findings, and which ones are open to you right now.'],
-  ['locks <id>', 'Exactly what one finding is asking you to record.'],
-  ['unlock <id> <answer>', 'File a finding. This is how you make progress.'],
-  ['hint <id>', 'Three per finding. Free. No penalty. Use them.'],
-  ['status', 'How many findings you have filed and how long is left.'],
-  ['abort', 'Stops the cascade. Only works once all five are filed.'],
+  ['locks', 'Lists the five findings and shows which ones are open to you right now.'],
+  ['locks <id>', 'Shows exactly what one finding is asking you to record.'],
+  ['unlock <id> <answer>', 'Files a finding, which is how you make progress.'],
+  ['hint <id>', 'Gives a hint. There are three per finding, and there is no penalty for using them.'],
+  ['status', 'Shows how many findings you have filed and how much time is left.'],
+  ['abort', 'Stops the cascade, but it only works once all five findings are filed.'],
 ];
 
 const INVESTIGATE = [
   ['mail', 'The mail spool. `mail 3` opens message 3.'],
-  ['headers <id>', 'The delivery record behind a message. Who really sent it.'],
+  ['headers <id>', 'The delivery record behind a message, which shows who really sent it.'],
   ['badge', 'Door events from the building access system.'],
   ['roster', 'Staff directory: desks, badges, who is where.'],
   ['scan <range>', 'Find machines on a network and the ports they answer on.'],
@@ -228,7 +228,7 @@ const FINDINGS = [
 // ── document ──────────────────────────────────────────────────────────
 const doc = new Document({
   creator: 'Meridian Grid Authority',
-  title: 'Protocol: Nightjar — Student Field Guide',
+  title: 'Protocol: Nightjar Student Field Guide',
   description: 'Student handout for the Protocol: Nightjar cybersecurity escape room.',
   numbering: {
     config: [
@@ -326,36 +326,36 @@ const doc = new Document({
         // ── the situation ─────────────────────────────────────────────
         h1('THE SITUATION'),
         body(
-          'Meridian Grid Authority is a regional power utility. It moves electricity to about a quarter of a million homes. It has 1,400 staff, badge readers on every door, and two computer networks that are supposed to never touch each other: the corporate network, where people read email and complain about the printer, and the control network, where the relay controllers that actually open and close breakers live.',
+          'Meridian Grid Authority is a regional power utility that supplies electricity to about a quarter of a million homes. The company has 1,400 staff, badge readers on every door, and two computer networks that are supposed to stay completely separate. The first is the corporate network, which is where employees read email and complain about the printer. The second is the control network, which holds the relay controllers that actually open and close the breakers.',
         ),
         body(
-          'You are the overnight SOC analyst. SOC stands for Security Operations Centre. It is a Tuesday night, you are the only person on site who does your job, and the shift is normally quiet.',
+          'You are the overnight SOC analyst, and SOC stands for Security Operations Centre. It is a Tuesday night, and you are the only person on site who does your job. Most of the time, this shift is quiet.',
         ),
         rich([
           ['At ', {}],
           ['02:15', { bold: true }],
           [
-            ' the operations console locks its operators out. Somebody has scheduled a load-shedding cascade for ',
+            ', the operations console locks its operators out. Someone has scheduled a load-shedding cascade for ',
             {},
           ],
           ['03:00', { bold: true }],
           [
-            '. Four sectors of the grid drop offline on a timer. 240,000 meters. Hospitals have generators. Most things do not.',
+            ', which means four sectors of the grid will go offline on a timer. That is 240,000 meters. Hospitals have backup generators, but most homes and businesses do not.',
             {},
           ],
         ]),
         body(
-          'Whoever did it leaves you a message. He calls himself NIGHTJAR, and he is not mysterious about it. He used to work here. His contract ended in August, and he says nothing he was given access to was ever taken away. He did not break in. He walked in, sat down at a desk that still has his name on it, and used permissions somebody signed off on.',
+          'The person responsible leaves you a message. He calls himself NIGHTJAR, and he does not try to hide who he is. He used to work at Meridian, and his contract ended in August, but he says that none of the access he was given was ever taken away. As a result, he did not have to break in. Instead, he walked in, sat down at a desk that still has his name on it, and used permissions that somebody had already approved.',
           { after: 220 },
         ),
 
         // ── your job ──────────────────────────────────────────────────
         h1('YOUR JOB'),
         body(
-          'There is an abort. It exists, and it works. It has worked the whole time.',
+          'There is an abort, and it has worked the whole time. The problem is that you are not allowed to use it yet.',
         ),
         rich([
-          ['It is held behind ', {}],
+          ['The abort is held behind ', {}],
           ['OT-REC-1', { bold: true, font: MONO }],
           [
             ', a recovery procedure Meridian wrote after the ',
@@ -363,19 +363,19 @@ const doc = new Document({
           ],
           ['last', { italics: true }],
           [
-            ' incident, when a panicking operator hit the wrong abort and dropped a sector that did not need dropping. The rule says: before an emergency abort is authorised, an analyst must file an incident finding for every subsystem the intrusion touched. The console checks each finding against the logs before it accepts it.',
+            ' incident, when a panicking operator hit the wrong abort and dropped a sector that did not need to be dropped. The rule says that before an emergency abort is authorised, an analyst has to file an incident finding for every subsystem the intrusion touched. The console checks each finding against the logs before it accepts it.',
             {},
           ],
         ]),
         body(
-          'There are five findings tonight. So the thing standing between you and the off switch is not a hacker and not a firewall. It is a form, written by a committee, that will not accept a wrong answer. NIGHTJAR knows this. It is part of why he picked tonight.',
+          'There are five findings tonight. This means that the thing standing between you and the abort is a form written by a committee, rather than a hacker or a firewall, and that form will not accept a wrong answer. NIGHTJAR knows this, which is part of the reason he picked tonight.',
           { after: 200 },
         ),
 
         callout([
           ['YOU HAVE 45 MINUTES.', { bold: true, color: RUST }],
           [
-            'The clock on screen is real. When all five findings are filed, run abort. Then the console asks one more question, because stopping an attack and working out who did it are two different jobs.',
+            'The clock on screen is real. When all five findings are filed, run abort. After that, the console asks one more question, because stopping an attack and figuring out who did it are two different jobs.',
             {},
           ],
         ]),
@@ -385,7 +385,7 @@ const doc = new Document({
         // ── how the console works ─────────────────────────────────────
         h1('HOW THE CONSOLE WORKS'),
         body(
-          'Everything happens by typing. There is nothing to click. Type a command, read what comes back, think about it, then file a finding.',
+          'Everything in the console happens by typing, so there is nothing to click. Type a command, read what comes back, think about what it means, and then file a finding.',
           { after: 200 },
         ),
 
@@ -443,25 +443,24 @@ const doc = new Document({
         gap(300),
 
         // ── ground rules ──────────────────────────────────────────────
-        h1('SIX THINGS THAT ARE TRUE'),
+        h1('SIX THINGS TO KNOW'),
         bullet(
-          'Every tool you need is already in the terminal. You do not need Google, a calculator, or anything installed.',
-          { bold: '' },
+          'Every tool you need is already in the terminal, so you do not need Google, a calculator, or anything else installed.',
         ),
         bullet(
-          'Read the man pages. Genuinely. They are short, and at least one of them tells you how to solve a finding.',
+          'Read the man pages. They are short, and at least one of them explains how to solve a finding.',
         ),
         bullet(
-          'Nothing is hidden in a clever place. No pixel hunting, no guessing passwords, no trivia. Every answer is sitting in a file or a log you are allowed to read. The work is noticing which part of it matters.',
+          'Nothing is hidden in a clever place. There is no pixel hunting, no password guessing, and no trivia. Every answer is in a file or a log you are allowed to read, and the real work is noticing which part of it matters.',
         ),
         bullet(
-          'Hints are free and there is no score. Being stuck for ten minutes teaches you nothing, so spend them.',
+          'Hints are free and there is no score. Being stuck for ten minutes does not teach you anything, so use them.',
         ),
         bullet(
-          'Wrong answers cost nothing except the seconds it takes to type another one. There is a limit on how fast you can guess, which exists to tell you that guessing is not the intended route.',
+          'A wrong answer only costs you the time it takes to type another one. There is a limit on how fast you can guess, which is there to show that guessing is not the intended way to solve anything.',
         ),
         bullet(
-          'You cannot break it. The filesystem is read-only, and refreshing the page does not lose your progress.',
+          'You cannot break anything. The filesystem is read-only, and refreshing the page does not erase your progress.',
         ),
 
         new Paragraph({ children: [new PageBreak()] }),
@@ -469,7 +468,7 @@ const doc = new Document({
         // ── findings log ──────────────────────────────────────────────
         h1('FINDINGS LOG'),
         body(
-          'Fill this in as you go. Writing down what you looked at, and not just the answer, is the part that matters at the end.',
+          'Fill this in as you go. Writing down what you looked at, and not only the answer, is what matters most during the debrief at the end.',
           { after: 200 },
         ),
 
@@ -519,13 +518,13 @@ const doc = new Document({
         // ── debrief ───────────────────────────────────────────────────
         h1('FOR THE DEBRIEF'),
         body(
-          'Nothing in this incident was a break-in. When you reach the end, the shift report tells you exactly which controls failed, and you will notice that almost none of them failed because the technology was weak.',
+          'No part of tonight’s incident was a break-in. When you reach the end, the shift report lists exactly which controls failed, and you will notice that almost none of them failed because the technology was weak.',
         ),
         rich(
           [
-            ['Keep a note as you go. We are going to ask you this: ', {}],
+            ['Keep notes as you go, because we are going to ask you this question: ', {}],
             [
-              'which of tonight’s failures was actually a technology problem, and which were organisational problems wearing a technology costume?',
+              'which of tonight’s failures were actually technology problems, and which were organisational problems that only looked like technology problems?',
               { bold: true },
             ],
           ],
@@ -540,7 +539,7 @@ const doc = new Document({
           children: [
             new TextRun({
               text:
-                'Everything in this scenario is fictional. The company, the people, the addresses and the domains are invented, and none of them resolve to anything real.',
+                'Everything in this scenario is fictional. The company, the people, the addresses, and the domains are all made up, and none of them lead to anything real.',
               font: SANS,
               size: 16,
               italics: true,
