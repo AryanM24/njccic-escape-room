@@ -45,12 +45,34 @@ body {
 
 /* ── terminal chrome ─────────────────────────────────────────── */
 
-.term-shell {
+.app-frame {
   display: flex;
   flex-direction: column;
   height: 100dvh;
+}
+
+.term-shell {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-height: 0;
   overflow: hidden;
   position: relative;
+}
+
+.edu-note {
+  flex: 0 0 auto;
+  margin: 0;
+  padding: 0.35rem 1rem;
+  border-top: 1px solid var(--fg-faint);
+  background: var(--bg-raised);
+  color: var(--fg-dim);
+  font-size: 0.8em;
+  line-height: 1.4;
+}
+
+.edu-note a {
+  color: var(--fg);
 }
 
 .term-status {

@@ -1,0 +1,65 @@
+/*
+ * Plain, light and printable, like the facilitator sheet. A reviewer reading
+ * this should see a school handout, not a terminal.
+ */
+
+/* globals.css paints the document dark for the terminal; this page is paper. */
+:global(body) {
+  background: #fffdf8;
+}
+
+.page {
+  --ink: #14110c;
+  --muted: #5b5449;
+  --line: #d9d2c5;
+
+  min-height: 100dvh;
+  margin: 0 auto;
+  padding: 2.5rem 1.5rem 5rem;
+  max-width: 42rem;
+  background: #fffdf8;
+  color: var(--ink);
+  font-family:
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    'Segoe UI',
+    sans-serif;
+  font-size: 1rem;
+  line-height: 1.65;
+}
+
+.page h1 {
+  font-size: 1.7rem;
+  margin: 0 0 0.75rem;
+}
+
+.page h2 {
+  font-size: 1.05rem;
+  margin: 2.25rem 0 0.5rem;
+  padding-bottom: 0.25rem;
+  border-bottom: 1px solid var(--line);
+}
+
+.page p,
+.page li {
+  margin: 0 0 0.75rem;
+}
+
+.page ul {
+  padding-left: 1.25rem;
+  margin: 0 0 0.75rem;
+}
+
+.page a {
+  color: #8a4b08;
+}
+
+.lead {
+  font-size: 1.1rem;
+}
+
+.back {
+  margin-top: 2.5rem;
+  color: var(--muted);
+}

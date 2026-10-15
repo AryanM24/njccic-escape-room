@@ -72,6 +72,11 @@ before they start, and **Protocol-Nightjar-Student-Guide.docx** is the printable
 guide: the scenario, a few starter commands, and the idea behind each finding. It asks
 students to write nothing down. Neither gives anything away.
 
+If the school filter blocks the site, [IT-REQUEST.md](IT-REQUEST.md) is an email to send the
+IT contact. The site also serves `/about`, a plain page for teachers and IT staff that says what
+the activity is and what it needs, and every page carries a one-line description of itself in
+the footer.
+
 Rebuild the handout with `npm i --no-save docx && node scripts/build-student-guide.mjs
 Protocol-Nightjar-Student-Guide.docx`. `docx` is not a project dependency on purpose.
 
