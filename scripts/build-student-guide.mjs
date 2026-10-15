@@ -218,7 +218,7 @@ const doc = new Document({
         para(
           [
             [
-              'Everything in this scenario is fictional, and none of the names, addresses or domains are real.',
+              'Everything in this scenario is fictional, and none of the names, addresses or domains are real. Made by Team 10 of the Advanced Interns at NJCCIC.',
               { italics: true },
             ],
           ],

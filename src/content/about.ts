@@ -11,6 +11,9 @@ export interface AboutSection {
 
 export const ABOUT_TITLE = 'About Protocol: Nightjar';
 
+/** Shown in the page footer, on /about, and in the handout. Keep the wording identical everywhere. */
+export const CREDIT = 'Made by Team 10 of the Advanced Interns at NJCCIC.';
+
 export const ABOUT_LEAD =
   'Protocol: Nightjar is a classroom activity for students who have finished the first semester of AP Cybersecurity. Teams of two to four work through five short investigations inside a simulated terminal, in one 45 minute class period.';
 
@@ -40,6 +43,10 @@ export const ABOUT_SECTIONS: readonly AboutSection[] = [
     paragraphs: [
       'It is not a hacking tool and it cannot touch a real system. The terminal is a simulation: it does not run real commands, scan real networks or connect to any other computer. The files are read-only and the whole scenario is fictional. Every company, person, address and domain in it is invented, the addresses come from ranges reserved for documentation and private networks, and there is no working exploit code anywhere in it.',
     ],
+  },
+  {
+    heading: 'Who made it',
+    paragraphs: [CREDIT],
   },
   {
     heading: 'Data and privacy',

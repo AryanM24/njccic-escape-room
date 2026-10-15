@@ -118,3 +118,5 @@ always in the evidence.
 
 *Everything in this scenario is fictional. The company, the people, the addresses and
 the domains are all invented, and none of them resolve to anything real.*
+
+*Made by Team 10 of the Advanced Interns at NJCCIC.*

@@ -11,6 +11,8 @@ finding for each of the five subsystems the intrusion touched.
 
 Five findings, a 45-minute clock, one class period.
 
+Made by Team 10 of the Advanced Interns at NJCCIC.
+
 ## Scoped to semester 1
 
 Everything here is solvable with **Units 1 to 3** of the AP Cybersecurity course
