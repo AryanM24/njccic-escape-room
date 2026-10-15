@@ -14,6 +14,14 @@ export const ABOUT_TITLE = 'About Protocol: Nightjar';
 /** Shown in the page footer, on /about, and in the handout. Keep the wording identical everywhere. */
 export const CREDIT = 'Made by Team 10 of the Advanced Interns at NJCCIC.';
 
+/** Names only. These pages are public, so no emails or phone numbers. */
+export const TEAM = [
+  'Chaitanya Palasamudrum',
+  'Bibhuti Swain',
+  'Aryan Mittal',
+  'Rohan Bhamidipati',
+];
+
 export const ABOUT_LEAD =
   'Protocol: Nightjar is a classroom activity for students who have finished the first semester of AP Cybersecurity. Teams of two to four work through five short investigations inside a simulated terminal, in one 45 minute class period.';
 
@@ -46,7 +54,7 @@ export const ABOUT_SECTIONS: readonly AboutSection[] = [
   },
   {
     heading: 'Who made it',
-    paragraphs: [CREDIT],
+    paragraphs: [CREDIT, `Team members: ${TEAM.join(', ')}.`],
   },
   {
     heading: 'Data and privacy',

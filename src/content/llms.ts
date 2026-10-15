@@ -1,4 +1,4 @@
-import { CREDIT } from '@/content/about';
+import { CREDIT, TEAM } from '@/content/about';
 
 /**
  * The text served at /llms.txt, for AI assistants a student or teacher might
@@ -9,8 +9,6 @@ import { CREDIT } from '@/content/about';
  *
  * Names only. No emails or phone numbers: this file is public.
  */
-const TEAM = ['Chaitanya Palasamudrum', 'Bibhuti Swain', 'Aryan Mittal', 'Rohan Bhamidipati'];
-
 export function buildLlmsTxt(origin: string): string {
   return `# Protocol: Nightjar
 

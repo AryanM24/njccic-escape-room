@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
+import { ABOUT_SECTIONS, TEAM } from '@/content/about';
 import { buildLlmsTxt } from '@/content/llms';
 import { LOCKS } from '@/content/locks';
 
@@ -33,5 +34,14 @@ describe('llms.txt', () => {
       expect(text.toLowerCase(), answer).not.toContain(answer.toLowerCase());
     }
     expect(text).not.toMatch(/10\.\d+\.\d+\.\d+/);
+  });
+});
+
+describe('/about', () => {
+  it('credits the team by name and carries no contact details', () => {
+    const about = JSON.stringify(ABOUT_SECTIONS);
+    for (const name of TEAM) expect(about).toContain(name);
+    expect(about).not.toMatch(/@[a-z0-9-]+\.[a-z]{2,}/i);
+    expect(about).not.toMatch(/\d{3}[-.\s]\d{3}[-.\s]\d{4}/);
   });
 });
