@@ -8,7 +8,7 @@ import { FIREWALL_RULES } from '@/content/network';
 import { ALPHABET_SIZE, caesarCrack, caesarShift } from '@/lib/tools/caesar';
 import { parseArgs, tokenize } from '@/lib/terminal/parse';
 import { complete } from '@/lib/terminal/complete';
-import { RATE_LIMIT_CONFIG, takeAttempt } from '@/server/rate-limit';
+import { RATE_LIMIT_CONFIG, takeAttempt, takeSharedAttempt } from '@/server/rate-limit';
 import { TestTerminal } from './helpers';
 
 describe('caesar', () => {
@@ -243,6 +243,24 @@ describe('rate limiting', () => {
     const blocked = takeAttempt(client, '03', 1_100);
     expect(blocked.allowed).toBe(false);
     expect(blocked.retryAfterSeconds).toBeGreaterThan(0);
+  });
+
+  it('keeps two browsers behind one address from throttling each other', () => {
+    const address = '203.0.113.7';
+    for (let attempt = 0; attempt < RATE_LIMIT_CONFIG.MAX_ATTEMPTS; attempt++) {
+      takeAttempt(`${address}|browser-aaaaaaaaaaaaaaaa`, '04', 2_000 + attempt);
+    }
+    expect(takeAttempt(`${address}|browser-aaaaaaaaaaaaaaaa`, '04', 2_100).allowed).toBe(false);
+    expect(takeAttempt(`${address}|browser-bbbbbbbbbbbbbbbb`, '04', 2_100).allowed).toBe(true);
+  });
+
+  it('still caps one address that rotates browser ids', () => {
+    const address = '198.51.100.9';
+    for (let attempt = 0; attempt < RATE_LIMIT_CONFIG.SHARED_MAX_ATTEMPTS; attempt++) {
+      expect(takeSharedAttempt(address, '05', 5_000 + attempt)).toBe(true);
+    }
+    expect(takeSharedAttempt(address, '05', 5_500)).toBe(false);
+    expect(takeSharedAttempt(address, '05', 5_000 + RATE_LIMIT_CONFIG.WINDOW_MS + 1_000)).toBe(true);
   });
 
   it('limits each finding independently', () => {

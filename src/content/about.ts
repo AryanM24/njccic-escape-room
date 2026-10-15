@@ -47,8 +47,8 @@ export const ABOUT_SECTIONS: readonly AboutSection[] = [
       'There are no accounts, no logins, no ads, no analytics and no cookies.',
       'There are no third-party scripts, fonts, images or embeds. The page loads everything from this one site.',
       'Progress, including an optional team name, is saved in the browser’s local storage on that one computer and is never sent anywhere.',
-      'When a student submits an answer, the page sends the finding number and the typed answer to this same site so it can be checked. Nothing that identifies the student is included.',
-      'To slow down guessing, the server counts recent attempts per network address, in memory only, and forgets them within minutes. The hosting provider may keep ordinary server logs.',
+      'When a student submits an answer, the page sends the finding number, the typed answer and a random anonymous id for that browser to this same site so it can be checked. The id is made up by the browser, is not linked to a name, and exists only so one laptop can be told apart from the rest of a class sharing a network address.',
+      'To slow down guessing, the server counts recent attempts per browser id and per network address, in memory only, and forgets them within minutes. The hosting provider may keep ordinary server logs.',
     ],
   },
   {

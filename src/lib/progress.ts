@@ -84,4 +84,37 @@ function sanitize(value: unknown): GameState {
   };
 }
 
+const BROWSER_ID_KEY = 'nightjar.browser.v1';
+let memoryBrowserId: string | null = null;
+
+/**
+ * A random id that stays with this browser, so the server can rate-limit one
+ * laptop instead of a whole school sitting behind a single network address.
+ * It identifies nobody. `crypto.randomUUID` needs a secure context, and a
+ * teacher may serve this over plain http on a LAN, hence the fallback.
+ */
+export function getBrowserId(): string {
+  if (memoryBrowserId) return memoryBrowserId;
+  try {
+    const saved = window.localStorage.getItem(BROWSER_ID_KEY);
+    if (saved && /^[A-Za-z0-9-]{16,64}$/.test(saved)) {
+      memoryBrowserId = saved;
+      return saved;
+    }
+  } catch {
+    // Storage blocked: the id lasts for this page load, which is still useful.
+  }
+  const fresh =
+    typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function'
+      ? crypto.randomUUID()
+      : Array.from({ length: 32 }, () => Math.floor(Math.random() * 16).toString(16)).join('');
+  memoryBrowserId = fresh;
+  try {
+    window.localStorage.setItem(BROWSER_ID_KEY, fresh);
+  } catch {
+    // See above.
+  }
+  return fresh;
+}
+
 export const PROGRESS_STORAGE_KEY = STORAGE_KEY;

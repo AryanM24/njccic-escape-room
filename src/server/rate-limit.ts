@@ -15,6 +15,15 @@ const WINDOW_MS = 60_000;
 const MAX_ATTEMPTS = 8;
 const COOLDOWN_MS = 20_000;
 
+/**
+ * A school usually puts every student behind one public address, so the
+ * per-browser limit above is what actually protects a lock from one laptop.
+ * This second ceiling is per address and deliberately roomy: a full class can
+ * mistype together without noticing it, but a script that rotates browser ids
+ * to dodge the first limit still runs into this one.
+ */
+const SHARED_MAX_ATTEMPTS = 240;
+
 interface Bucket {
   attempts: number[];
   cooldownUntil: number;
@@ -58,9 +67,34 @@ export function takeAttempt(clientId: string, target: string, now = Date.now()):
   return { allowed: true, retryAfterSeconds: 0 };
 }
 
+const sharedBuckets = new Map<string, number[]>();
+
+/** Per-address ceiling, counted across every browser behind that address. */
+export function takeSharedAttempt(address: string, target: string, now = Date.now()): boolean {
+  if (sharedBuckets.size >= 500) {
+    for (const [key, attempts] of sharedBuckets) {
+      if (attempts.every((at) => now - at >= WINDOW_MS)) sharedBuckets.delete(key);
+    }
+  }
+  const key = `${address}::${target}`;
+  const recent = (sharedBuckets.get(key) ?? []).filter((at) => now - at < WINDOW_MS);
+  if (recent.length >= SHARED_MAX_ATTEMPTS) {
+    sharedBuckets.set(key, recent);
+    return false;
+  }
+  recent.push(now);
+  sharedBuckets.set(key, recent);
+  return true;
+}
+
 /** A correct answer clears the bucket — no reason to punish a solved lock. */
 export function clearAttempts(clientId: string, target: string): void {
   buckets.delete(`${clientId}::${target}`);
 }
 
-export const RATE_LIMIT_CONFIG = { WINDOW_MS, MAX_ATTEMPTS, COOLDOWN_MS } as const;
+export const RATE_LIMIT_CONFIG = {
+  WINDOW_MS,
+  MAX_ATTEMPTS,
+  COOLDOWN_MS,
+  SHARED_MAX_ATTEMPTS,
+} as const;

@@ -7,7 +7,7 @@ import { complete } from '@/lib/terminal/complete';
 import { dim, plain } from '@/lib/terminal/output';
 import type { CommandContext, GameState, OutputLine, UnlockOutcome } from '@/lib/terminal/types';
 import { HOME } from '@/lib/vfs';
-import { initialState, loadState, saveState } from '@/lib/progress';
+import { getBrowserId, initialState, loadState, saveState } from '@/lib/progress';
 import { usePrefersReducedMotion } from '@/lib/hooks';
 import {
   BANNER,
@@ -205,7 +205,7 @@ export function Terminal() {
         const response = await fetch('/api/unlock', {
           method: 'POST',
           headers: { 'content-type': 'application/json' },
-          body: JSON.stringify({ target, answer }),
+          body: JSON.stringify({ target, answer, browserId: getBrowserId() }),
         });
         return (await response.json()) as UnlockOutcome;
       } catch {

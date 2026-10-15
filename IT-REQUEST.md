@@ -22,7 +22,7 @@ What it is, so you can check it quickly:
 - It is a simulation. The terminal runs nothing real, scans nothing real and connects to no other computer. The scenario, names, addresses and domains are all fictional.
 - No accounts, no ads, no analytics, no cookies, and no third-party scripts, fonts or embeds.
 - Progress is saved in the browser's local storage on that device only.
-- The only network request after the page loads is one HTTPS POST to **[site address]/api/unlock** on the same hostname, which checks a typed answer. It contains the finding number and the answer text, nothing that identifies the student.
+- The only network request after the page loads is one HTTPS POST to **[site address]/api/unlock** on the same hostname, which checks a typed answer. It contains the finding number, the answer text and a random anonymous browser id, nothing that identifies the student. The id exists so a class sharing one network address is not throttled as a single user.
 
 What it needs: HTTPS to that one hostname, JavaScript, and local storage. No other domains, WebSockets, downloads or extensions.
 
