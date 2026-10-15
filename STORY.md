@@ -131,9 +131,13 @@ Procedural. The console is not a character and has no feelings about you. It rep
 refuses, and it occasionally explains something because OT-REC-1 requires an explanation
 to be recorded.
 
-NIGHTJAR speaks three times: at the start, at the halfway mark, and once at the end. He
-is tired and a little smug and he is not interested in being understood. He never
-delivers a moral. If a line of his reads like a thesis statement, cut it.
+NIGHTJAR gives three full messages: at the start, at the halfway mark, and once at the
+end. Between those he may add a one- or two-line aside, only in reaction to something the
+player just did: the first and fourth findings filed, three wrong answers in a row, the
+first hint, and the last hint of a lock. The console itself still never congratulates
+anyone. He is tired and a little smug and he is not interested in being understood. He
+never delivers a moral, and he never says anything that narrows down an answer. If a line
+of his reads like a thesis statement, cut it.
 
 Nothing in the fiction is real. RFC 1918 and RFC 5737 addresses only, invented domains,
 no working exploit code, no real utility and no real person. The worst thing that

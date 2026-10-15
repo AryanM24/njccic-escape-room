@@ -13,6 +13,7 @@ export function initialState(now = Date.now()): GameState {
     team: null,
     effects: true,
     seenBeats: [],
+    misses: 0,
   };
 }
 
@@ -79,6 +80,7 @@ function sanitize(value: unknown): GameState {
     seenBeats: Array.isArray(record.seenBeats)
       ? record.seenBeats.filter((beat): beat is string => typeof beat === 'string')
       : [],
+    misses: typeof record.misses === 'number' && record.misses >= 0 ? Math.floor(record.misses) : 0,
   };
 }
 

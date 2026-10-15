@@ -4,6 +4,7 @@ import { ABORT_SUCCESS, AFTER_ACTION, NIGHTJAR_MIDPOINT } from '@/content/story'
 import { BRIEFING_TXT } from '@/content/files';
 import { dim, fail, hintLine, lines, ok, plain, rule, story, table } from '@/lib/terminal/output';
 import { parseArgs } from '@/lib/terminal/parse';
+import { abortKeyProgress, findingAside, hintAside, hintsUsed, missAside } from './feedback';
 import type { Command, CommandContext, GameState, OutputLine } from '@/lib/terminal/types';
 
 export function isAvailable(lock: LockDefinition, state: Readonly<GameState>): boolean {
@@ -97,25 +98,31 @@ export const unlock: Command = {
     const answer = positional.slice(1).join(' ');
     const result = await ctx.submit(id, answer);
     if (!result.correct) {
+      // A throttled attempt was never judged, so it does not count as a miss.
+      const misses = result.retryAfterSeconds ? ctx.state.misses : ctx.state.misses + 1;
+      ctx.patchState({ misses });
       return [
         fail(result.message ?? 'rejected.'),
         ...(result.retryAfterSeconds
           ? [dim(`  wait ${result.retryAfterSeconds}s`)]
           : [dim(`  expected: ${lock.answerFormat}      stuck? hint ${id}`)]),
+        ...(result.retryAfterSeconds ? [] : [plain(''), ...missAside(misses)]),
       ];
     }
 
     const open = [...ctx.state.open, id];
-    ctx.patchState({ open });
+    ctx.patchState({ open, misses: 0 });
 
     const out: OutputLine[] = [
       ok(`FINDING ${id} · ${lock.codename} ACCEPTED`),
       plain(
         `OT-REC-1  ${open.length}/5 filed    authorization segment ${lock.fragment} released`,
       ),
+      plain(`abort key  ${abortKeyProgress(open)}`),
       plain(''),
       ...lines(lock.beat),
       plain(''),
+      ...findingAside(open.length),
     ];
 
     if (open.length === 3 && !ctx.state.seenBeats.includes('midpoint')) {
@@ -159,11 +166,13 @@ export const hint: Command = {
       ];
     }
 
+    const aside = hintAside(next, hintsUsed(ctx.state));
     ctx.patchState({ hints: { ...ctx.state.hints, [id]: next } });
     return [
       hintLine(`lock ${id} · hint ${next}/3`),
       ...lines(wrap(lock.hints[next - 1], 72), 'hint'),
       ...(next < 3 ? [plain(''), dim(`still stuck? hint ${id}`)] : []),
+      ...(aside.length > 0 ? [plain(''), ...aside] : []),
     ];
   },
 };
@@ -175,7 +184,6 @@ export const status: Command = {
   manual: ['Where you are: findings filed, hints used, what is still workable.'],
   run(_args, ctx) {
     const open = ctx.state.open.length;
-    const hintsUsed = Object.values(ctx.state.hints).reduce<number>((sum, n) => sum + (n ?? 0), 0);
     const sealed = LOCKS.filter(
       (lock) => !ctx.state.open.includes(lock.id) && isAvailable(lock, ctx.state),
     );
@@ -184,7 +192,8 @@ export const status: Command = {
       plain('INCIDENT 2026-0917-01   "NIGHTJAR"'),
       plain(`  team              ${ctx.state.team ?? '(unnamed, try `team <name>`)'}`),
       plain(`  findings filed    ${open}/5   ${'█'.repeat(open)}${'░'.repeat(5 - open)}`),
-      plain(`  hints used        ${hintsUsed}`),
+      plain(`  abort key         ${abortKeyProgress(ctx.state.open)}`),
+      plain(`  hints used        ${hintsUsed(ctx.state)}`),
       plain(`  cascade           ${ctx.state.aborted ? 'STOOD DOWN' : 'ARMED for 03:00'}`),
       plain(`  attribution       ${ctx.state.attributed ? 'CLOSED' : 'OPEN'}`),
       plain(''),

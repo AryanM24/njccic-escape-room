@@ -114,15 +114,6 @@ on a real bad night:
 If you find yourself trying to be clever, stop and read the evidence again. It is
 always in the evidence.
 
-## One last thing
-
-Nothing in this incident was a break-in. When you get to the end, the report will tell
-you exactly which controls failed, and you will notice that almost none of them failed
-because the technology was weak.
-
-Keep a note of that as you go. It is the actual point of the activity, and the debrief
-is going to ask you about it.
-
 ---
 
 *Everything in this scenario is fictional. The company, the people, the addresses and

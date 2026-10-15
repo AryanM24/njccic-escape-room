@@ -33,6 +33,8 @@ export interface GameState {
   effects: boolean;
   /** Beats that have fired, so they never repeat on refresh. */
   seenBeats: string[];
+  /** Wrong answers in a row since the last accepted finding. Drives NIGHTJAR's asides. */
+  misses: number;
 }
 
 export interface UnlockOutcome {

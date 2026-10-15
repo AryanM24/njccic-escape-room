@@ -69,8 +69,8 @@ Without the variable set, the page shows the run of show and no answers.
 
 [STUDENT-BRIEFING.md](STUDENT-BRIEFING.md) is the spoiler-free version to read aloud
 before they start, and **Protocol-Nightjar-Student-Guide.docx** is the printable
-handout: the scenario, a command reference, spoiler-free directions for each finding,
-a findings log they fill in as they go, and space for debrief notes. Neither gives anything away.
+guide: the scenario, a few starter commands, and the idea behind each finding. It asks
+students to write nothing down. Neither gives anything away.
 
 Rebuild the handout with `npm i --no-save docx && node scripts/build-student-guide.mjs
 Protocol-Nightjar-Student-Guide.docx`. `docx` is not a project dependency on purpose.
@@ -120,7 +120,7 @@ classroom.
 - [DESIGN.md](DESIGN.md) visual and interaction design, including accessibility rules
 - [LOCKS.md](LOCKS.md) puzzle design, the semester 1 scope rule, one entry per finding
 - [STUDENT-BRIEFING.md](STUDENT-BRIEFING.md) spoiler-free briefing to read aloud
-- **Protocol-Nightjar-Student-Guide.docx** printable student handout and findings log
+- **Protocol-Nightjar-Student-Guide.docx** printable student guide
 - [WALKTHROUGH.md](WALKTHROUGH.md) the full solution, command by command
 - [AGENTS.md](AGENTS.md) working agreements for anyone editing this
 
