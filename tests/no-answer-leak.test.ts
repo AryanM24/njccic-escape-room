@@ -4,6 +4,8 @@ import { describe, expect, it } from 'vitest';
 
 import { checkAnswer } from '@/server/answer-keys';
 
+import { ANSWERS } from './answers';
+
 /**
  * The students taking this activity will open DevTools — that is the course.
  * "View source" must be a dead end, so no answer string may appear anywhere
@@ -11,14 +13,6 @@ import { checkAnswer } from '@/server/answer-keys';
  *
  * Listing the answers here is safe: tests are never bundled or deployed.
  */
-const ANSWERS = [
-  'meridian-grid.net',
-  'D-14',
-  'WREN-4417',
-  '10.20.4.31:23',
-  '10.40.7.19',
-  'm.tso',
-] as const;
 
 /**
  * Strings that MUST appear in shipped content for their puzzle to work at all,

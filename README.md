@@ -79,6 +79,10 @@ IT contact. The site also serves `/about`, a plain page for teachers and IT staf
 the activity is and what it needs, and every page carries a one-line description of itself in
 the footer.
 
+The site also serves `/llms.txt`, a plain-text description for AI assistants that includes the
+credit and a citation. It explains the idea behind each finding and tells an assistant not to
+give answers. It lists the team by name only, since the file is public.
+
 Rebuild the handout with `npm i --no-save docx && node scripts/build-student-guide.mjs
 Protocol-Nightjar-Student-Guide.docx`. `docx` is not a project dependency on purpose.
 
