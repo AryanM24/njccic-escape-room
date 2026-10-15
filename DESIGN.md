@@ -26,8 +26,8 @@ light mode.
 
 | Token             | Value     | Use                                            |
 | ----------------- | --------- | ---------------------------------------------- |
-| `--bg`            | `#0b0906` | Terminal background (warm near-black, not #000) |
-| `--bg-raised`     | `#151009` | Inline panels, table fills                      |
+| `--bg`            | `#050505` | Terminal background (neutral near-black, not #000) |
+| `--bg-raised`     | `#0d0d0d` | Inline panels, table fills                      |
 | `--fg`            | `#ffb648` | Primary amber text                             |
 | `--fg-dim`        | `#a8722a` | Prompts, metadata, timestamps                  |
 | `--fg-faint`      | `#5c4116` | Rules, box drawing, disabled                   |
