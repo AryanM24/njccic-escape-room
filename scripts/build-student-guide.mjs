@@ -131,7 +131,7 @@ const FINDINGS = [
     title: 'Finding 04: PERIMETER',
     note: 'Opens after 01. You will record a host and a port.',
     text:
-      'The corporate network and the control network are supposed to stay separate, and a firewall enforces that with a list of rules. This finding has two sides, which are what is actually running on the control network and what the firewall actually lets reach it, and neither tells the whole story alone. Some services there are risky but expected, because they do the machine’s real job. You want the one that sends login details in a way anyone watching could read.',
+      'The corporate network and the control network are supposed to stay separate, and a firewall enforces that with a list of rules, but this finding is about what is actually running on the control network. Some services there are risky but expected, because they do the machine’s real job. You want the one that sends login details in a way anyone watching could read, and the console explains what each service is in plain words.',
   },
   {
     title: 'Finding 05: DETECTION',

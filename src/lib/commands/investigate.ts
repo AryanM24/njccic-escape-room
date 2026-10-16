@@ -1,6 +1,12 @@
 import { MAILBOX } from '@/content/mail';
 import { BADGE_EVENTS, BADGE_NOTES, STAFF, STAFF_FOOTER } from '@/content/badge';
-import { CHANGE_TICKET, FIREWALL_RULES, SCAN_HOSTS, SUBNET_LEGEND } from '@/content/network';
+import {
+  CHANGE_TICKET,
+  FIREWALL_RULES,
+  SCAN_HOSTS,
+  SERVICE_KEY,
+  SUBNET_LEGEND,
+} from '@/content/network';
 import { LOG_SOURCES } from '@/content/logs';
 import { dim, fail, lines, plain, rule, table, truncate } from '@/lib/terminal/output';
 import { parseArgs } from '@/lib/terminal/parse';
@@ -19,17 +25,17 @@ export const mail: Command = {
   run(args) {
     const { positional } = parseArgs(args);
     if (positional.length === 0) {
+      // Address on the first line, subject under it. The address is shown
+      // because it is what the sender actually used, and two lines per
+      // message fit a classroom laptop where a four-column table would wrap.
       return [
         dim('spool: d.okonkwo@meridiangrid.net   5 messages'),
-        ...table(
-          ['ID', 'TIME', 'FROM', 'SUBJECT'],
-          MAILBOX.map((message) => [
-            String(message.id),
-            message.date,
-            truncate(message.fromDisplay, 22),
-            truncate(message.subject, 40),
-          ]),
-        ),
+        plain(''),
+        ...MAILBOX.flatMap((message) => [
+          plain(`${String(message.id).padEnd(3)}${message.date.padEnd(18)}${message.from}`),
+          dim(`   ${truncate(message.subject, 64)}`),
+        ]),
+        plain(''),
         dim('read a message: mail <id>      inspect delivery: headers <id>'),
       ];
     }
@@ -47,6 +53,16 @@ export const mail: Command = {
   },
 };
 
+/** Plain-English reading guide under the raw headers. It explains the fields and judges nothing. */
+const HEADER_KEY: readonly string[] = [
+  'key:',
+  '  Return-Path             where replies and bounces really go',
+  '  Received                each machine that handled the message. The last',
+  '                          one listed is where it entered',
+  '  Authentication-Results  whether the sending machine was allowed to send',
+  '                          for that domain (pass or fail)',
+];
+
 export const headers: Command = {
   name: 'headers',
   summary: 'show the delivery headers of a message',
@@ -62,7 +78,12 @@ export const headers: Command = {
     const { positional } = parseArgs(args);
     const message = MAILBOX.find((entry) => entry.id === Number(positional[0]));
     if (!message) return [fail(`headers: no message ${positional[0]}`)];
-    return [dim(`-- delivery headers, message ${message.id} --`), ...lines(message.headers)];
+    return [
+      dim(`-- delivery headers, message ${message.id} --`),
+      ...lines(message.headers),
+      plain(''),
+      ...lines(HEADER_KEY, 'dim'),
+    ];
   },
 };
 
@@ -149,7 +170,8 @@ export const scan: Command = {
     'A /16 fixes the first two and holds 65,536. Which range a host sits in',
     'decides which firewall rules apply to it, so the notation matters.',
     '',
-    'See `fw` for the rules and the list of subnets.',
+    'Under the results, a short key says what each service is in plain words.',
+    'See `fw` for the firewall rules and the list of subnets.',
   ],
   run(args) {
     const { positional } = parseArgs(args);
@@ -167,9 +189,11 @@ export const scan: Command = {
     }
 
     const out: OutputLine[] = [dim(`scanning ${target} ...   ${hosts.length} hosts up`), plain('')];
+    const seen = new Set<string>();
     for (const host of hosts) {
       out.push(plain(`${host.ip}   ${host.hostname}`));
       for (const port of host.ports) {
+        seen.add(port.service);
         out.push(
           plain(
             `    ${String(port.port).padStart(5)}/tcp  ${port.state.padEnd(9)}${port.service}` +
@@ -178,6 +202,12 @@ export const scan: Command = {
         );
       }
       out.push(plain(''));
+    }
+
+    const key = Object.entries(SERVICE_KEY).filter(([service]) => seen.has(service));
+    if (key.length > 0) {
+      out.push(dim('what these services are:'));
+      for (const [service, meaning] of key) out.push(dim(`  ${service.padEnd(11)}${meaning}`));
     }
     return out;
   },

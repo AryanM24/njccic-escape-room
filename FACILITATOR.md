@@ -86,10 +86,11 @@ case-sensitive.
 
 ### 01 INGRESS, about 7 minutes
 
-`mail` lists five. `mail 3` reads the phish. `headers 3` shows the plumbing.
+`mail` lists five by sender address. `mail 3` reads the phish. `headers 3` shows the
+plumbing, with a plain-English key under it.
 
-**Wrong turns:** the real domain `meridiangrid.net`; the display name; never running
-`headers`.
+**Wrong turns:** the real domain `meridiangrid.net` (the console now says it is Meridian's
+own); the display name; never running `headers`. A pasted full address is accepted.
 
 **Debrief:** Three things gave this away: the hyphen in the domain, the SPF fail, and a
 delivery chain that starts on a desk inside the building. Which would a tired engineer
@@ -119,12 +120,14 @@ instead of the account code; not finding the file (point them at `tree /var`).
 enough, then tell them a real key today is a number with about 77 digits. Note also
 that the digits came through untouched: the cipher hid the letters and leaked the shape.
 
-### 04 PERIMETER, about 10 minutes
+### 04 PERIMETER, about 7 minutes
 
-`scan 10.20.4.0/24` and `fw`.
+`scan 10.20.4.0/24`. The answer comes from the scan alone, and the scan prints a
+plain-English key for each service. `fw` is read after filing, and is where the debrief
+below comes from.
 
-**Wrong turns:** naming 502/modbus, which is unencrypted but belongs there and is worth
-two minutes of argument; host without port; missing that RULE 20 sits above RULE 30.
+**Wrong turns:** naming 502/modbus, which the key calls the control protocol and
+expected; host without port; starting with `fw` and getting lost in the rules.
 
 **Debrief:** Nobody wrote a bad rule. RULE 30 is a good rule in the wrong position, and
 a rule set with dead code reads exactly like a correct one. How would you catch that in
@@ -142,7 +145,8 @@ raised an alert. What turns a log into detection?
 
 ### Attribution
 
-`abort`, then `roster`, then `accuse m.tso`.
+`abort`, then `roster`, then `accuse m.tso`. After `abort` the console points at the
+finding 05 address and the roster, so nobody has to work out where to look.
 
 The chain:
 

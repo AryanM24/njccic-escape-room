@@ -92,9 +92,12 @@ mis-scoped.
 
 ### 01 · INGRESS
 
-`mail` lists five messages. Four are ordinary: benefits, a change window notice, a
-printer complaint, a vendor advisory. One is the phish. `mail 3` reads a body,
-`headers 3` shows the Return-Path, the delivery chain and the SPF result.
+`mail` lists five messages by the address each one was sent from. Four are ordinary:
+benefits, a change window notice, a printer complaint, a vendor advisory. One is the
+phish. `mail 3` reads a body, `headers 3` shows the Return-Path, the delivery chain and
+the SPF result, with a short key under it that explains each field in plain words.
+The objective says to record the part after the @, and a whole pasted address is
+accepted.
 
 The phish is written to be good. Correct signature block, plausible ticket number, a
 deadline two days out rather than two minutes, and it warns the reader it will ask for a
@@ -102,7 +105,8 @@ password, which is the move that actually works on people. Every tell is in the
 plumbing, and there are three of them, so a careful reader finds at least one.
 
 **Answer:** the look-alike domain.
-**Wrong turns:** the real domain; the display name; never running `headers`.
+**Wrong turns:** the real domain (the console now says it is Meridian's own and sends them
+back to the mail); the display name; never running `headers`.
 **Feeds forward:** the delivery chain starts on a corporate workstation whose address
 turns up again in 04 and 05.
 
@@ -134,17 +138,22 @@ The intended reaction is that this takes about four seconds.
 
 ### 04 · PERIMETER
 
-`scan 10.20.4.0/24` returns six hosts. Most open ports are legitimate for a control
-network: modbus on 502 is unencrypted but it is the control protocol and belongs there,
-which is worth two minutes of argument. One controller answers on telnet.
+`scan 10.20.4.0/24` returns six hosts and, under them, a plain-English key for every
+service shown. That key is what makes the finding a matching exercise: the objective
+says "a login service that sends passwords as readable text" and exactly one line in the
+key says that. The only decoy left is modbus on 502, which the key calls the control
+protocol and expected. There is no closed telnet port and no extra industrial protocol
+to look up.
 
-`fw` prints the ACL in the CED's own format. RULE 20 permits the corporate floor into
-the whole OT range; RULE 30 denies corporate into OT. RULE 30 never runs, because rules
-are evaluated in order and the first match wins (3.4.B.2, 3.4.D.3). Nobody wrote a bad
-rule. Somebody wrote a good rule in the wrong place.
+The answer comes from the scan alone. `fw` is read afterwards, and the beat explains it.
+It prints the ACL in the CED's own format. RULE 20 permits the corporate floor into the
+whole OT range; RULE 30 denies corporate into OT. RULE 30 never runs, because rules are
+evaluated in order and the first match wins (3.4.B.2, 3.4.D.3). Nobody wrote a bad rule.
+Somebody wrote a good rule in the wrong place. That idea is still taught, but it is no
+longer a second thing a team has to work out before they can file.
 
 **Answer:** `host:port` of the plaintext login service.
-**Wrong turns:** naming 502/modbus; host without port; missing the rule order.
+**Wrong turns:** naming 502/modbus; host without port; starting with `fw`.
 
 ### 05 · DETECTION
 
@@ -165,6 +174,10 @@ detection phase, sitting in plain sight.
 
 `abort` releases the authorization and stops the cascade. OT-REC-1 then asks who,
 because containment and attribution are different fields on the same form.
+
+After `abort` the console says the culprit is the address filed in finding 05 and that
+`roster` lists who each workstation is assigned to. The lookup is the lesson, so the
+console does not make the team hunt for which address to look up.
 
 `roster` assigns the workstation to a contractor whose badge was revoked on 29 August and
 whose account, desk and firewall rule were not. That is the insider adversary of

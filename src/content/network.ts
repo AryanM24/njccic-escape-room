@@ -7,6 +7,13 @@ import type { FirewallRule, ScanHost } from './types';
  * on 502 is unencrypted but it is the control protocol and it belongs there.
  * Exactly one controller answers on telnet, and exactly one ACL rule lets the
  * corporate floor reach it before the deny that was supposed to stop it.
+ *
+ * The answer comes from the scan alone. `scan` prints a plain-English key for
+ * every service it shows, so the work is matching a description to a line
+ * instead of remembering what telnet is. The firewall rules explain how the
+ * host was reachable, and are read after the finding is filed. There are no
+ * decoys beyond modbus: no closed telnet port, no filtered RDP, no extra
+ * industrial protocols to look up.
  */
 export const OT_SUBNET = '10.20.4.0/24';
 
@@ -22,18 +29,12 @@ export const SCAN_HOSTS: readonly ScanHost[] = [
   {
     ip: '10.20.4.20',
     hostname: 'hmi-console-a',
-    ports: [
-      { port: 443, service: 'https', state: 'open' },
-      { port: 3389, service: 'ms-wbt-server', state: 'filtered' },
-    ],
+    ports: [{ port: 443, service: 'https', state: 'open' }],
   },
   {
     ip: '10.20.4.30',
     hostname: 'relay-ctrl-01',
-    ports: [
-      { port: 502, service: 'modbus', state: 'open', note: 'control protocol, expected' },
-      { port: 44818, service: 'ethernet-ip', state: 'open' },
-    ],
+    ports: [{ port: 502, service: 'modbus', state: 'open', note: 'control protocol, expected' }],
   },
   {
     ip: '10.20.4.31',
@@ -46,7 +47,6 @@ export const SCAN_HOSTS: readonly ScanHost[] = [
         note: 'banner: Arbiter RTU-3000 fw 4.1.2 -- login:',
       },
       { port: 502, service: 'modbus', state: 'open', note: 'control protocol, expected' },
-      { port: 44818, service: 'ethernet-ip', state: 'open' },
     ],
   },
   {
@@ -60,12 +60,19 @@ export const SCAN_HOSTS: readonly ScanHost[] = [
   {
     ip: '10.20.4.99',
     hostname: 'ot-jump',
-    ports: [
-      { port: 22, service: 'ssh', state: 'open' },
-      { port: 23, service: 'telnet', state: 'closed' },
-    ],
+    ports: [{ port: 22, service: 'ssh', state: 'open' }],
   },
 ];
+
+/** What `scan` prints under its results, for each service that appeared in them. */
+export const SERVICE_KEY: Readonly<Record<string, string>> = {
+  ssh: 'remote login, encrypted',
+  https: 'web page, encrypted',
+  postgresql: 'database',
+  modbus: 'the control protocol itself, expected on this network',
+  snmp: 'device monitoring',
+  telnet: 'remote login that sends the username and password as readable text',
+};
 
 /**
  * Written in the form the CED uses in Unit 3.4: action, direction, protocol,

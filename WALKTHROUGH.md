@@ -167,9 +167,10 @@ unlock 03 WREN-4417
 scan 10.20.4.0/24
 ```
 
-Six hosts. Most of the open ports belong on a control network — modbus on 502 is
-unencrypted but it is the control protocol, and that is worth arguing about rather than
-answering with. One host stands out:
+Six hosts, and under them a key that says what each service is in plain words. Most of
+the open ports belong on a control network. Modbus on 502 is unencrypted, but the key
+calls it the control protocol and expected here. One line in the key says "remote login
+that sends the username and password as readable text", and one host stands out:
 
 ```
 10.20.4.31   relay-ctrl-02
@@ -178,6 +179,12 @@ answering with. One host stands out:
 
 Telnet sends the username and password across the wire as readable text. The other
 relay controller, `relay-ctrl-01`, does not answer on 23.
+
+```
+unlock 04 10.20.4.31:23
+```
+
+The answer needs nothing but the scan. After filing, `fw` shows how corporate reached it:
 
 ```
 fw
@@ -205,10 +212,6 @@ ticket CHG-4417
 
 Raised from 10.40.7.19 by m.tso, approved by r.vance fourteen minutes *before* the
 ticket was created, which makes the approval a forgery.
-
-```
-unlock 04 10.20.4.31:23
-```
 
 ---
 

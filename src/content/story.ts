@@ -147,8 +147,9 @@ export const ABORT_SUCCESS: readonly string[] = [
   'OT-REC-1 has one more field and it is not optional. Containment is done.',
   'Attribution is a separate question and the form wants a name.',
   '',
-  'Everything tonight ran through one workstation. `roster` will tell you',
-  'whose desk that is.',
+  'Everything tonight ran through one workstation: the address you filed',
+  'in finding 05. `roster` lists who each workstation is assigned to, and',
+  'the username in its first column is what `accuse` wants.',
   '',
   'Name NIGHTJAR:   accuse <username>',
 ];

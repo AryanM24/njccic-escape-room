@@ -150,6 +150,8 @@ Five findings filed, the console releases the abort, the cascade stops.
 Then the form asks who. The answer is not in any single finding: it is one workstation
 address appearing in the mail headers, in the firewall rule and in the relay log, and a
 staff directory that says whose desk that is and that his badge was revoked a month ago.
+The console points the player there on purpose: after `abort` it names the finding 05
+address and the roster, because the lookup is the lesson and the hunt for it was not.
 
 Naming Jamie gets a refusal citing the 17:30 badge-out. Naming Rhea gets the timestamp.
 Naming Dele gets the phish. Being wrong should still teach something.

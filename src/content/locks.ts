@@ -24,7 +24,7 @@ export const LOCKS: readonly LockDefinition[] = [
     brief: 'Initial access. Where did the credential come from?',
     objective:
       "Five messages reached d.okonkwo tonight. One of them is how this started. " +
-      'Record the domain the sender actually used.',
+      'Record the domain the sender actually used, which is the part after the @.',
     requires: [],
     fragment: '7F3C',
     answerFormat: 'a domain name, e.g. example.net',
@@ -135,15 +135,16 @@ export const LOCKS: readonly LockDefinition[] = [
     ced: '3.1.B, 3.3.B, 3.4.B.2, 3.4.D.3',
     brief: 'The corporate floor should not be able to reach a relay controller.',
     objective:
-      'Scan the control network and read the firewall rules. Record the host ' +
-      'and port running a login service that sends passwords as readable text.',
+      'Scan the control network. Record the host and port running a login ' +
+      'service that sends passwords as readable text. The firewall rules (fw) ' +
+      'show how it could be reached, and are worth reading once it is filed.',
     requires: ['01'],
     fragment: 'D24A',
     answerFormat: 'host:port, e.g. 10.20.4.1:443',
     hints: [
-      'Two commands, and you want both before you answer: `scan 10.20.4.0/24` and `fw`.',
-      'Modbus on 502 is unencrypted, but it is the control protocol and it is supposed to be there. You are looking for a remote login service that sends the username and password across the wire in readable text. It has been obsolete since about 1995.',
-      'One of the two relay controllers answers on a port the other one does not. Read its banner. Then read the ACL from the top and work out which rule matches traffic from the corporate floor first.',
+      'One command lists every machine on the control network and the ports each one answers on: `scan 10.20.4.0/24`. Under the results is a key that says what each service is in plain words.',
+      'Modbus is the control protocol and it is supposed to be there. You are looking for the service the key describes as sending the username and password as readable text.',
+      'Exactly one machine runs it. Record that machine\'s address and the port number, joined by a colon.',
     ],
     beat: [
       'Exposure confirmed. Telnet, in the clear, on a relay controller.',

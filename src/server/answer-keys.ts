@@ -70,10 +70,20 @@ export function isValidTarget(target: string): boolean {
   return Object.hasOwn(KEYS, target);
 }
 
+/**
+ * Finding 01 asks for a domain, and people paste the whole sender address.
+ * Everything after the @ is the domain, so take it, and drop a closing `>`.
+ */
+function domainOf(answer: string): string {
+  const at = answer.lastIndexOf('@');
+  return (at >= 0 ? answer.slice(at + 1) : answer).replace(/[>\s]+$/, '');
+}
+
 export function checkAnswer(target: string, answer: string): boolean {
   const entry = KEYS[target];
   if (!entry) return false;
-  const digest = answerDigest(target, answer, SALT, entry.caseSensitive);
+  const given = target === '01' ? domainOf(answer) : answer;
+  const digest = answerDigest(target, given, SALT, entry.caseSensitive);
   return entry.digests.includes(digest);
 }
 
@@ -86,6 +96,15 @@ const REJECTIONS: readonly string[] = [
 
 export function rejectionFor(target: string, answer: string): string {
   if (target === 'accuse') return accusationRejection(answer);
+  if (target === '01') {
+    const domain = domainOf(answer.trim()).toLowerCase();
+    if (!domain.includes('.')) {
+      return 'rejected. A domain has a dot in it, like example.net. Record the part of the sender address after the @.';
+    }
+    if (domain === 'meridiangrid.net') {
+      return "rejected. That is Meridian's own domain, and it sent the other messages. Look for a different one.";
+    }
+  }
   const index = Math.abs(hashInt(answer)) % REJECTIONS.length;
   return REJECTIONS[index];
 }
@@ -127,9 +146,16 @@ function accusationRejection(answer: string): string {
       'not the same as causing it.'
     );
   }
+  if (/^\d+\.\d+\.\d+\.\d+$/.test(name) || name.startsWith('wks-')) {
+    return (
+      'Rejected. That is a machine, not a person. `roster` lists who each ' +
+      'workstation is assigned to. Name that person.'
+    );
+  }
   return (
     'Rejected. Nobody by that name had access tonight. Everything ran through ' +
-    'one workstation; `roster` says whose desk that is.'
+    'one workstation, the address you filed in finding 05. `roster` says whose ' +
+    'desk that is, and its first column holds the usernames.'
   );
 }
 

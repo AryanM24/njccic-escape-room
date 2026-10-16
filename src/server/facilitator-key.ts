@@ -26,10 +26,10 @@ export const FACILITATOR_KEY: readonly FacilitatorEntry[] = [
   {
     id: '01',
     answer: 'meridian-grid.net',
-    alsoAccepted: [],
+    alsoAccepted: ['the whole sender address; everything after the @ is used'],
     minutes: 7,
     wrongTurns: [
-      'Submitting meridiangrid.net, which is the real domain.',
+      'Submitting meridiangrid.net, which is the real domain. The console now says so and sends them back to the mail.',
       'Submitting the display name, "Meridian IT Security".',
       'Reading the five bodies and never running `headers 3`.',
     ],
@@ -66,11 +66,11 @@ export const FACILITATOR_KEY: readonly FacilitatorEntry[] = [
     id: '04',
     answer: '10.20.4.31:23',
     alsoAccepted: ['10.20.4.31 23', 'relay-ctrl-02:23'],
-    minutes: 10,
+    minutes: 7,
     wrongTurns: [
-      'Naming 502/modbus. It is unencrypted but it is the control protocol and belongs there. Worth two minutes of discussion, not the answer.',
+      'Naming 502/modbus. The scan key says it is the control protocol and expected here, so a team that does this skipped the key.',
       'Giving the host without the port, or the port without the host.',
-      'Not noticing that RULE 20 sits above RULE 30 and therefore wins.',
+      'Starting with `fw`. The answer comes from the scan alone. Send them back to it, and have them read `fw` after they file.',
     ],
     debrief:
       'Nobody here wrote a bad rule. RULE 30 is a perfectly good rule in the wrong position, and a rule set with dead code in it reads exactly like a correct one. How would you catch that in a review?',
